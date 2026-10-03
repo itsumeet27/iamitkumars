@@ -38,6 +38,19 @@ jobs:
           cp index.html 404.html .htaccess _site/
           cp -r about research publications contact css js assets _site/
 
+      - name: Find public_html two folders down
+        id: remote
+        if: steps.ftp.outputs.configured == 'true'
+        env:
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          FTP_SERVER_DIR: ${{ secrets.FTP_SERVER_DIR }}
+        run: |
+          python3 scripts/test_resolve_ftp_dir.py
+          dir=$(python3 scripts/resolve_ftp_dir.py)
+          echo "remote_dir=$dir" >> "$GITHUB_OUTPUT"
+
       - name: Upload to public_html
         if: steps.ftp.outputs.configured == 'true'
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
@@ -48,7 +61,7 @@ jobs:
           port: 21
           protocol: ftp
           local-dir: ./_site/
-          server-dir: ${{ secrets.FTP_SERVER_DIR != '' && secrets.FTP_SERVER_DIR || 'public_html/' }}
+          server-dir: ${{ steps.remote.outputs.remote_dir }}
           exclude: |
             **/.git*
             **/.git*/**
