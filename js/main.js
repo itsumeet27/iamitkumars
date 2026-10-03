@@ -6,6 +6,12 @@
       var open = nav.classList.toggle("open");
       toggle.setAttribute("aria-expanded", open ? "true" : "false");
     });
+    nav.addEventListener("click", function (event) {
+      if (event.target.closest("a")) {
+        nav.classList.remove("open");
+        toggle.setAttribute("aria-expanded", "false");
+      }
+    });
   }
 
   var filters = document.querySelector(".filters");
@@ -49,7 +55,7 @@
   if (form) {
     form.addEventListener("submit", function (event) {
       event.preventDefault();
-      var note = document.querySelector(".form-note");
+      var note = form.querySelector(".form-note");
       var name = form.name.value.trim();
       var email = form.email.value.trim();
       var message = form.message.value.trim();
