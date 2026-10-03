@@ -40,7 +40,7 @@ One-time setup:
    - `FTP_PASSWORD` — the FTP password
 4. Merge to `main`, or run **Deploy to Hostinger** from the Actions tab.
 
-If the FTP account already opens inside `public_html`, add one more secret, `FTP_SERVER_DIR`, with the value `./`. Otherwise leave it unset and the workflow uploads to `public_html/`.
+The FTP login opens above the website folder. The workflow looks two directories down for `public_html` (for example `domains/your-domain/public_html/`) and uploads there. If more than one site is on the account, set `FTP_SERVER_DIR` to the exact folder, including the trailing slash.
 
 The workflow uploads only the website files. It does not wipe the rest of the hosting account. Until the three secrets exist, a push to `main` skips the upload and says so in the Actions log.
 
